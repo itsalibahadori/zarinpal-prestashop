@@ -485,5 +485,90 @@ class Zarinpal extends PaymentModule
     public static function getTransactionTableName() 
     {
         return _DB_PREFIX_ . self::ZARINPAL_TRANSACTIONS_TABLE;
-    } 
+    }
+
+
+    /**
+     * Zarinpal error message.
+     * 
+     * @param int $code
+     * @return string
+     */
+    public static function error_message($code)
+    {
+        $message = null;
+
+        switch ($code) {
+            case $code == -9:
+                $message = ('اطلاعات ارسال شده نادرست می باشد.');
+                $message .= "<br>" . ('1- مرچنت کد داخل تنظیمات وارد نشده باشد');
+                $message .= "<br>" . ('2- مبلغ پرداختی کمتر یا بیشتر از حد مجاز می باشد');
+            break; 
+            case $code == -10:
+                $message = ('ای پی یا مرچنت كد پذیرنده صحیح نیست.');
+            break; 
+            case $code == -11:
+                $message = ('مرچنت کد فعال نیست، پذیرنده مشکل خود را به امور مشتریان زرین‌پال ارجاع دهد.');
+            break; 
+            case $code == -12:
+                $message = ('تلاش بیش از دفعات مجاز در یک بازه زمانی کوتاه به امور مشتریان زرین پال اطلاع دهید');
+            break; 
+            case $code == -15:
+                $message = ('درگاه پرداخت به حالت تعلیق در آمده است، پذیرنده مشکل خود را به امور مشتریان زرین‌پال ارجاع دهد.');
+            break; 
+            case $code == -16:
+                $message = ('سطح تایید پذیرنده پایین تر از سطح نقره ای است.');
+            break; 
+            case $code == -17:
+                $message = ('محدودیت پذیرنده در سطح آبی');
+            break; 
+            case $code == -30:
+                $message = ('پذیرنده اجازه دسترسی به سرویس تسویه اشتراکی شناور را ندارد.');
+            break; 
+            case $code == -31:
+                $message = ('حساب بانکی تسویه را به پنل اضافه کنید. مقادیر وارد شده برای تسهیم درست نیست. پذیرنده جهت استفاده از خدمات سرویس تسویه اشتراکی شناور، باید حساب بانکی معتبری به پنل کاربری خود اضافه نماید.');
+            break; 
+            case $code == -32:
+                $message = ('مبلغ وارد شده از مبلغ کل تراکنش بیشتر است.');
+            break; 
+            case $code == -33:
+                $message = ('درصدهای وارد شده صحیح نیست.');
+            break; 
+            case $code == -34:
+                $message = ('مبلغ وارد شده از مبلغ کل تراکنش بیشتر است.');
+            break; 
+            case $code == -35:
+                $message = ('تعداد افراد دریافت کننده تسهیم بیش از حد مجاز است.');
+            break; 
+            case $code == -36:
+                $message = ('حداقل مبلغ جهت تسهیم باید ۱۰۰۰۰ ریال باشد');
+            break; 
+            case $code == -37:
+                $message = ('یک یا چند شماره شبای وارد شده برای تسهیم از سمت بانک غیر فعال است.');
+            break; 
+            case $code == -38:
+                $message = ('خط،عدم تعریف صحیح شبا،لطفا دقایقی دیگر تلاش کنید.');
+            break; 
+            case $code == -39:
+                $message = ('خطایی رخ داده است به امور مشتریان زرین پال اطلاع دهید');
+            break; 
+            case $code == -50:
+                $message = ('مبلغ پرداخت شده با مقدار مبلغ ارسالی در متد وریفای متفاوت است.');
+            break; 
+            case $code == -51:
+                $message = ('پرداخت ناموفق');
+            break; 
+            case $code == -52:
+                $message = ('خطای غیر منتظره‌ای رخ داده است. پذیرنده مشکل خود را به امور مشتریان زرین‌پال ارجاع دهد.');
+            break; 
+            case $code == -53:
+                $message = ('پرداخت متعلق به این مرچنت کد نیست.');
+            break; 
+            case $code == -54:
+                $message = ('اتوریتی نامعتبر است.');
+            break;
+        }
+
+        return $message;
+    }
 }

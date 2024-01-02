@@ -56,17 +56,9 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
             ));
         }
 
-        var_dump($this->context->cart->id);
-
         if ($_GET['Status'] === 'OK') {
-
-            
             $amount = $this->context->cart->getOrderTotal(true);
-
-            if (Configuration::get(Zarinpal::ZARINPAL_MERCHANT_CODE) == 'IRT') {
-                $amount = $amount / 10;
-            }
-
+            
             $params = [
                 'merchant_id' => Configuration::get(Zarinpal::ZARINPAL_MERCHANT_CODE),
                 'amount' => $amount,
@@ -89,12 +81,45 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
             $result = json_decode($result, true, JSON_PRETTY_PRINT);
             curl_close($ch);
 
-            // $result = $result['data'];
+            if ($result['data']['code'] === 100) {
+                $this->module->validateOrder(
+                    (int) $this->context->cart->id,
+                    (int) $this->getOrderState(),
+                    (float) $this->context->cart->getOrderTotal(true, Cart::BOTH),
+                    $this->l('زرین پال'),
+                    null,
+                    [
+                        'transaction_id' => $result['data']['ref_id'],
+                    ],
+                    (int) $this->context->currency->id,
+                    false,
+                    $customer->secure_key
+                );
 
-            if ($result['code'] === 100) {
+                Tools::redirect($this->context->link->getPageLink(
+                    'order-confirmation',
+                    true,
+                    (int) $this->context->language->id,
+                    [
+                        'id_cart' => (int) $this->context->cart->id,
+                        'id_module' => (int) $this->module->id,
+                        'id_order' => (int) $this->module->currentOrder,
+                        'key' => $customer->secure_key,
+                    ]
+                ));
 
-            } elseif ($result['code'] === 101) {
-
+            } elseif ($result['data']['code'] === 101) {
+                Tools::redirect($this->context->link->getPageLink(
+                    'order-confirmation',
+                    true,
+                    (int) $this->context->language->id,
+                    [
+                        'id_cart' => (int) $this->context->cart->id,
+                        'id_module' => (int) $this->module->id,
+                        'id_order' => (int) $this->module->currentOrder,
+                        'key' => $customer->secure_key,
+                    ]
+                ));
             } else {
                 $this->errors[] = Zarinpal::error_message($result['errors']['code']);
                 $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
@@ -106,39 +131,8 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
         }
 
         // echo '<pre>';
-        // var_dump($result);
+        // var_dump(Configuration::get('PS_OS_WS_PAYMENT'));
         // echo '</pre>';
-
-
-
-
-        // $this->module->validateOrder(
-        //     (int) $this->context->cart->id,
-        //     (int) $this->getOrderState(),
-        //     (float) $this->context->cart->getOrderTotal(true, Cart::BOTH),
-        //     $this->getOptionName(),
-        //     null,
-        //     [
-        //         'transaction_id' => Tools::passwdGen(), // Should be retrieved from your Payment response
-        //     ],
-        //     (int) $this->context->currency->id,
-        //     false,
-        //     $customer->secure_key
-        // );
-
-        // Tools::redirect($this->context->link->getPageLink(
-        //     'order-confirmation',
-        //     true,
-        //     (int) $this->context->language->id,
-        //     [
-        //         'id_cart' => (int) $this->context->cart->id,
-        //         'id_module' => (int) $this->module->id,
-        //         'id_order' => (int) $this->module->currentOrder,
-        //         'key' => $customer->secure_key,
-        //     ]
-        // ));
-
-
     }
 
     /**
@@ -175,5 +169,15 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
         }
 
         return false;
+    }
+
+    /**
+     * Get OrderState identifier
+     *
+     * @return int
+     */
+    private function getOrderState()
+    {
+        return (int) Configuration::get('PS_OS_WS_PAYMENT');
     }
 }

@@ -81,58 +81,58 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
             $result = json_decode($result, true, JSON_PRETTY_PRINT);
             curl_close($ch);
 
-            if ($result['data']['code'] === 100) {
-                $this->module->validateOrder(
-                    (int) $this->context->cart->id,
-                    (int) $this->getOrderState(),
-                    (float) $this->context->cart->getOrderTotal(true, Cart::BOTH),
-                    $this->l('زرین پال'),
-                    null,
-                    [
-                        'transaction_id' => $result['data']['ref_id'],
-                    ],
-                    (int) $this->context->currency->id,
-                    false,
-                    $customer->secure_key
-                );
+            if (! $err) {
+                if ($result['data']['code'] === 100) {
+                    $this->module->validateOrder(
+                        (int) $this->context->cart->id,
+                        (int) $this->getOrderState(),
+                        (float) $this->context->cart->getOrderTotal(true, Cart::BOTH),
+                        $this->l('زرین پال'),
+                        null,
+                        [
+                            'transaction_id' => $result['data']['ref_id'],
+                        ],
+                        (int) $this->context->currency->id,
+                        false,
+                        $customer->secure_key
+                    );
 
-                Tools::redirect($this->context->link->getPageLink(
-                    'order-confirmation',
-                    true,
-                    (int) $this->context->language->id,
-                    [
-                        'id_cart' => (int) $this->context->cart->id,
-                        'id_module' => (int) $this->module->id,
-                        'id_order' => (int) $this->module->currentOrder,
-                        'key' => $customer->secure_key,
-                    ]
-                ));
+                    Tools::redirect($this->context->link->getPageLink(
+                        'order-confirmation',
+                        true,
+                        (int) $this->context->language->id,
+                        [
+                            'id_cart' => (int) $this->context->cart->id,
+                            'id_module' => (int) $this->module->id,
+                            'id_order' => (int) $this->module->currentOrder,
+                            'key' => $customer->secure_key,
+                        ]
+                    ));
 
-            } elseif ($result['data']['code'] === 101) {
-                Tools::redirect($this->context->link->getPageLink(
-                    'order-confirmation',
-                    true,
-                    (int) $this->context->language->id,
-                    [
-                        'id_cart' => (int) $this->context->cart->id,
-                        'id_module' => (int) $this->module->id,
-                        'id_order' => (int) $this->module->currentOrder,
-                        'key' => $customer->secure_key,
-                    ]
-                ));
+                } elseif ($result['data']['code'] === 101) {
+                    Tools::redirect($this->context->link->getPageLink(
+                        'order-confirmation',
+                        true,
+                        (int) $this->context->language->id,
+                        [
+                            'id_cart' => (int) $this->context->cart->id,
+                            'id_module' => (int) $this->module->id,
+                            'id_order' => (int) $this->module->currentOrder,
+                            'key' => $customer->secure_key,
+                        ]
+                    ));
+                } else {
+                    $this->errors[] = Zarinpal::error_message($result['errors']['code']);
+                    $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
+                }
             } else {
-                $this->errors[] = Zarinpal::error_message($result['errors']['code']);
+                $this->errors[] = "خطا در اتصال به درگاه برای تایید تراکنش : <br> $err";
                 $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
             }
-
         } elseif ($_GET['Status'] === 'NOK') {
             $this->errors[] = $this->l("پرداخت توسط کاربر لغو شد");
             $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
         }
-
-        // echo '<pre>';
-        // var_dump(Configuration::get('PS_OS_WS_PAYMENT'));
-        // echo '</pre>';
     }
 
     /**

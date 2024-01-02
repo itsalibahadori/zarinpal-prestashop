@@ -1,20 +1,7 @@
 <?php
 /**
- * Copyright since 2007 PrestaShop SA and Contributors
- * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License 3.0 (AFL-3.0)
- * that is bundled with this package in the file LICENSE.md.
- * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/AFL-3.0
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright Since 2007 PrestaShop SA and Contributors
+ * @author    Ali Bahadori <ali.bahadori41@yahoo.com>
+ * @copyright Ali Bahadori 2024
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 class AdminConfigureZarinpalController extends ModuleAdminController
@@ -36,17 +23,17 @@ class AdminConfigureZarinpalController extends ModuleAdminController
                 'fields' => [
                     Zarinpal::ZARINPAL_EXTERNAL_ENABLED => [
                         'type' => 'bool',
-                        'title' => $this->l('Active Zarinpal Payment'),
+                        'title' => $this->l('فعالسازی درگاه پرداخت'),
                         'validation' => 'isBool',
                         'cast' => 'intval',
                     ],
                     Zarinpal::ZARINPAL_MERCHANT_CODE => [
                         'type' => 'text',
-                        'title' => $this->l('Merchant Code'),
+                        'title' => $this->l('مرچنت کد'),
                     ],
                     Zarinpal::ZARINPAL_CURRENCY => [
                         'type' => 'select',
-                        'title' => $this->l('Payment Currency'),
+                        'title' => $this->l('ارز درگاه'),
                         'required' => true,
                         'identifier' => 'id',
                         'list' => [
@@ -62,7 +49,7 @@ class AdminConfigureZarinpalController extends ModuleAdminController
                     ],
                 ],
                 'submit' => [
-                    'title' => $this->l('Save'),
+                    'title' => $this->l('ذخیره'),
                 ],
             ],
         ];

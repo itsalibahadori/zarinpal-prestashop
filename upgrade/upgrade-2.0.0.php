@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright since 2007 PrestaShop SA and Contributors
+ * Copyright Ali Bahadori 2024
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
@@ -14,7 +14,7 @@
  * to license@prestashop.com so we can send you a copy immediately.
  *
  * @author    PrestaShop SA and Contributors <contact@prestashop.com>
- * @copyright Since 2007 PrestaShop SA and Contributors
+ * @copyright Ali Bahadori 2024
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 if (!defined('_PS_VERSION_')) {

@@ -66,7 +66,7 @@ class Zarinpal extends PaymentModule
         return (bool) parent::install()
             && (bool) $this->registerHook(static::HOOKS)
             && $this->installConfiguration()
-            && $this->createZarinpalTransactionsTable()
+            // && $this->createZarinpalTransactionsTable() // active on next version.
             && $this->installTabs();
     }
 

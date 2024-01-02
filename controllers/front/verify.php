@@ -56,6 +56,7 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
             ));
         }
 
+        var_dump($this->context->cart->id);
 
         if ($_GET['Status'] === 'OK') {
 
@@ -93,21 +94,20 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
             if ($result['code'] === 100) {
 
             } elseif ($result['code'] === 101) {
-    
+
             } else {
-                echo '<pre>';
-                var_dump($result);
-                echo '</pre>';
-                $this->errors[] = $this->l($result['errors']['message']);
-                $this->setTemplate('module:zarinpal/views/templates/front/external.tpl');
+                $this->errors[] = Zarinpal::error_message($result['errors']['code']);
+                $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
             }
 
         } elseif ($_GET['Status'] === 'NOK') {
             $this->errors[] = $this->l("پرداخت توسط کاربر لغو شد");
-            $this->setTemplate('module:zarinpal/views/templates/front/external.tpl');
+            $this->setTemplate('module:zarinpal/views/templates/front/verify.tpl');
         }
 
-        // $result = $result['data'];
+        // echo '<pre>';
+        // var_dump($result);
+        // echo '</pre>';
 
 
 
@@ -175,43 +175,5 @@ class ZarinpalVerifyModuleFrontController extends ModuleFrontController
         }
 
         return false;
-    }
-
-    /**
-     * Get OrderState identifier
-     *
-     * @return int
-     */
-    private function getOrderState()
-    {
-        $option = Tools::getValue('option');
-        $orderStateId = (int) Configuration::get('PS_OS_ERROR');
-
-        switch ($option) {
-            case 'external':
-                $orderStateId = (int) Configuration::get('PS_OS_WS_PAYMENT');
-                break;
-        }
-
-        return $orderStateId;
-    }
-
-    /**
-     * Get translated Payment Option name
-     *
-     * @return string
-     */
-    private function getOptionName()
-    {
-        $option = Tools::getValue('option');
-        $name = $this->module->displayName;
-
-        switch ($option) {
-            case 'external':
-                $name = $this->l('Zarinpal');
-                break;
-        }
-
-        return $name;
     }
 }

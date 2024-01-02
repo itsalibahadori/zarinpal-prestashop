@@ -77,6 +77,6 @@ class ZarinpalAccountModuleFrontController extends ModuleFrontController
             'orderPayments' => $orderPayments,
         ]);
 
-        $this->setTemplate('module:paymentexample/views/templates/front/account.tpl');
+        $this->setTemplate('module:zarinpal/views/templates/front/account.tpl');
     }
 }

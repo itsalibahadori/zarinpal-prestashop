@@ -20,14 +20,9 @@
 {extends "$layout"}
 
 {block name="content"}
-  <section id="zarinpal-external" class="card card-block mb-2">
-    <p>{l s='This page simulate an external payment gateway     : Order will be created with OrderState "Remote payment accepted".' mod='zarinpal'}</p>
-    <form action="{$action}" method="post" class="form-horizontal mb-1">
-      <div class="text-sm-center">
-        <button type="submit" class="btn btn-primary">
-          {l s='back' mod='zarinpal'}
-        </button>
-      </div>
-    </form>
+  <section id="zarinpal-external" class="card card-block mb-2 p-2">
+    <a href='/order'>
+     {l s='back to checkout' mod='zarinpal'}
+    </a>
   </section>
 {/block}
